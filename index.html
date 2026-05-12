@@ -3,92 +3,243 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interview AI Assistant</title>
+  <title>InterviewAI — Real-time Interview Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
 </head>
 <body>
-  <div class="app">
 
-    <div class="header">
-      <div class="logo">
-        <i class="ti ti-microphone" aria-hidden="true"></i>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        </div>
+        <span class="brand-name">InterviewAI</span>
       </div>
-      <div>
-        <div class="title">Interview AI Assistant</div>
-        <div class="subtitle">Voice-powered answers from Zoom or Teams</div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-section="main" onclick="showSection('main',this)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </button>
+        <button class="nav-item" data-section="history" onclick="showSection('history',this)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          History
+          <span class="nav-badge" id="history-badge" style="display:none">0</span>
+        </button>
+        <button class="nav-item" data-section="settings" onclick="showSection('settings',this)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          Settings
+        </button>
+      </nav>
+
+      <div class="source-section">
+        <p class="sidebar-label">Audio Source</p>
+        <div class="source-pills">
+          <button class="pill active" id="pill-zoom" onclick="setSource('zoom')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 10l4-4v12l-4-4V10zm-2-2H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z"/></svg>
+            Zoom
+          </button>
+          <button class="pill" id="pill-teams" onclick="setSource('teams')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18 9v6h3V9h-3zm-4-3.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM3 9v9h12V9H3z"/></svg>
+            Teams
+          </button>
+          <button class="pill" id="pill-mic" onclick="setSource('mic')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+            Mic
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div class="status-bar">
-      <div class="dot" id="dot"></div>
-      <span id="status-text">Select a source and press the mic to begin</span>
-    </div>
-
-    <div class="source-row">
-      <button class="source-btn active" id="btn-zoom" onclick="setSource('zoom')">
-        <i class="ti ti-video" aria-hidden="true"></i> Zoom
-      </button>
-      <button class="source-btn" id="btn-teams" onclick="setSource('teams')">
-        <i class="ti ti-brand-teams" aria-hidden="true"></i> Microsoft Teams
-      </button>
-      <button class="source-btn" id="btn-mic" onclick="setSource('mic')">
-        <i class="ti ti-microphone" aria-hidden="true"></i> Direct Mic
-      </button>
-    </div>
-
-    <div class="profile-box">
-      <label class="box-label"><i class="ti ti-user" aria-hidden="true"></i> Your Profile (optional)</label>
-      <input type="text" id="profile-role" placeholder="e.g. Senior Data Engineer at Snowflake" />
-      <textarea id="profile-jd" rows="2" placeholder="Paste key skills or job description highlights..."></textarea>
-    </div>
-
-    <div class="mic-area">
-      <button class="mic-btn" id="mic-btn" onclick="toggleRecording()" aria-label="Start recording">
-        <i class="ti ti-microphone" id="mic-icon"></i>
-      </button>
-      <span class="mic-label" id="mic-label">Tap to listen</span>
-    </div>
-
-    <div class="transcript-box">
-      <div class="box-label"><i class="ti ti-quote" aria-hidden="true"></i> Question detected</div>
-      <div class="transcript-text" id="transcript">
-        <span class="placeholder">Your interviewer's question will appear here...</span>
+      <div class="live-status">
+        <div class="live-dot" id="live-dot"></div>
+        <span id="live-label">Idle</span>
       </div>
-    </div>
 
-    <div class="answer-box">
-      <div class="box-label"><i class="ti ti-sparkles" aria-hidden="true"></i> AI suggested answer</div>
-      <div class="answer-text" id="answer">
-        <span class="placeholder">Answer will be generated once a question is detected...</span>
+      <div class="sidebar-tip">
+        <p class="tip-head">Pro tip</p>
+        <p class="tip-body">Use Chrome or Edge for best speech recognition. Route Zoom/Teams audio via VB-Cable (Win) or BlackHole (Mac).</p>
       </div>
-    </div>
+    </aside>
 
-    <div class="actions">
-      <button class="act-btn" onclick="copyAnswer()"><i class="ti ti-copy" aria-hidden="true"></i> Copy</button>
-      <button class="act-btn" onclick="clearAll()"><i class="ti ti-refresh" aria-hidden="true"></i> Clear</button>
-      <button class="act-btn" onclick="runDemo()"><i class="ti ti-player-play" aria-hidden="true"></i> Demo</button>
-      <button class="act-btn primary" onclick="askFollowup()">Follow-ups ↗</button>
-    </div>
-
-    <div class="api-key-box">
-      <label class="box-label"><i class="ti ti-key" aria-hidden="true"></i> Anthropic API Key</label>
-      <div style="display:flex;gap:8px">
-        <input type="password" id="api-key-input" placeholder="sk-ant-..." style="flex:1" />
-        <button class="act-btn" onclick="saveKey()" style="flex:0;padding:0 16px">Save</button>
+    <!-- Main: Dashboard -->
+    <main class="main" id="section-main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">Live Assistant</h1>
+          <p class="page-sub">Capture questions · Get instant AI answers</p>
+        </div>
+        <button class="ghost-btn" onclick="runDemo()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Run Demo
+        </button>
       </div>
-      <p class="hint">Your key is stored locally in your browser only. Never shared.</p>
-    </div>
 
-    <div class="history" id="history-section" style="display:none">
-      <div class="history-title">Session history</div>
-      <div id="history-list"></div>
-    </div>
+      <!-- Mic hero -->
+      <div class="mic-hero">
+        <div class="rings" id="rings">
+          <div class="ring r1"></div>
+          <div class="ring r2"></div>
+          <div class="ring r3"></div>
+        </div>
+        <button class="mic-btn" id="mic-btn" onclick="toggleRecording()" aria-label="Toggle recording">
+          <svg id="mic-svg" class="mic-svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        </button>
+        <p class="mic-hint" id="mic-hint">Press to listen</p>
+        <div class="source-chip" id="source-chip">● Zoom</div>
+      </div>
+
+      <!-- Cards -->
+      <div class="cards">
+        <div class="card q-card">
+          <div class="card-header">
+            <div class="card-icon q-icon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <span class="card-label">Question Detected</span>
+            <span class="live-pill" id="q-live" style="display:none">LIVE</span>
+          </div>
+          <div class="card-body" id="transcript">
+            <div class="empty-msg">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.25"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+              Awaiting voice input…
+            </div>
+          </div>
+        </div>
+
+        <div class="card a-card">
+          <div class="card-header">
+            <div class="card-icon a-icon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <span class="card-label">AI Suggested Answer</span>
+            <button class="copy-btn" id="copy-btn" onclick="copyAnswer()" style="display:none">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <div class="card-body answer-body" id="answer">
+            <div class="empty-msg">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.25"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Answer will appear here…
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-row">
+        <button class="bottom-btn" onclick="clearAll()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+          Clear
+        </button>
+        <button class="bottom-btn accent" onclick="askFollowup()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Get Follow-up Questions
+        </button>
+      </div>
+    </main>
+
+    <!-- Main: History -->
+    <main class="main" id="section-history" style="display:none">
+      <div class="topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">History</h1>
+          <p class="page-sub">All Q&amp;As from this session</p>
+        </div>
+        <button class="ghost-btn danger" onclick="clearHistory()">Clear All</button>
+      </div>
+      <div id="history-list">
+        <div class="empty-history">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <p>No session history yet.</p>
+          <span>Start the assistant to record Q&amp;As here.</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Main: Settings -->
+    <main class="main" id="section-settings" style="display:none">
+      <div class="topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">Settings</h1>
+          <p class="page-sub">API key, profile &amp; preferences</p>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <div class="settings-card">
+          <div class="sc-head">
+            <div class="sc-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <h3 class="sc-title">Anthropic API Key</h3>
+              <p class="sc-desc">Stored locally in your browser only.</p>
+            </div>
+          </div>
+          <div class="key-row">
+            <input type="password" id="api-key-input" placeholder="sk-ant-api03-…" class="field" />
+            <button class="save-btn" onclick="saveKey()">Save</button>
+          </div>
+          <p class="key-status" id="key-status"></p>
+        </div>
+
+        <div class="settings-card">
+          <div class="sc-head">
+            <div class="sc-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <h3 class="sc-title">Your Profile</h3>
+              <p class="sc-desc">Personalizes AI answers to your experience.</p>
+            </div>
+          </div>
+          <input type="text" id="profile-role" placeholder="e.g. Senior Data Engineer at Snowflake" class="field" style="margin-bottom:10px" />
+          <textarea id="profile-jd" rows="3" placeholder="Paste key skills or job description highlights…" class="field textarea"></textarea>
+          <button class="save-btn" onclick="saveProfile()">Save Profile</button>
+        </div>
+
+        <div class="settings-card tips-card">
+          <h3 class="sc-title" style="margin-bottom:16px">Voice Capture Tips</h3>
+          <div class="tips-grid">
+            <div class="tip-item">
+              <span class="tip-num">01</span>
+              <div>
+                <strong>Windows</strong>
+                <p>Enable Stereo Mix in Sound settings, or use VB-Cable to route Zoom/Teams audio into your mic input.</p>
+              </div>
+            </div>
+            <div class="tip-item">
+              <span class="tip-num">02</span>
+              <div>
+                <strong>Mac</strong>
+                <p>Install BlackHole or Loopback to create a virtual audio device that captures system audio.</p>
+              </div>
+            </div>
+            <div class="tip-item">
+              <span class="tip-num">03</span>
+              <div>
+                <strong>Browser</strong>
+                <p>Chrome or Edge required for Web Speech API. Firefox does not support voice recognition.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
   </div>
 
-  <div id="toast" class="toast"></div>
-
+  <div class="toast" id="toast"></div>
   <script src="app.js"></script>
 </body>
 </html>
