@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interview AI Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+</head>
+<body>
+  <div class="app">
+
+    <div class="header">
+      <div class="logo">
+        <i class="ti ti-microphone" aria-hidden="true"></i>
+      </div>
+      <div>
+        <div class="title">Interview AI Assistant</div>
+        <div class="subtitle">Voice-powered answers from Zoom or Teams</div>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <div class="dot" id="dot"></div>
+      <span id="status-text">Select a source and press the mic to begin</span>
+    </div>
+
+    <div class="source-row">
+      <button class="source-btn active" id="btn-zoom" onclick="setSource('zoom')">
+        <i class="ti ti-video" aria-hidden="true"></i> Zoom
+      </button>
+      <button class="source-btn" id="btn-teams" onclick="setSource('teams')">
+        <i class="ti ti-brand-teams" aria-hidden="true"></i> Microsoft Teams
+      </button>
+      <button class="source-btn" id="btn-mic" onclick="setSource('mic')">
+        <i class="ti ti-microphone" aria-hidden="true"></i> Direct Mic
+      </button>
+    </div>
+
+    <div class="profile-box">
+      <label class="box-label"><i class="ti ti-user" aria-hidden="true"></i> Your Profile (optional)</label>
+      <input type="text" id="profile-role" placeholder="e.g. Senior Data Engineer at Snowflake" />
+      <textarea id="profile-jd" rows="2" placeholder="Paste key skills or job description highlights..."></textarea>
+    </div>
+
+    <div class="mic-area">
+      <button class="mic-btn" id="mic-btn" onclick="toggleRecording()" aria-label="Start recording">
+        <i class="ti ti-microphone" id="mic-icon"></i>
+      </button>
+      <span class="mic-label" id="mic-label">Tap to listen</span>
+    </div>
+
+    <div class="transcript-box">
+      <div class="box-label"><i class="ti ti-quote" aria-hidden="true"></i> Question detected</div>
+      <div class="transcript-text" id="transcript">
+        <span class="placeholder">Your interviewer's question will appear here...</span>
+      </div>
+    </div>
+
+    <div class="answer-box">
+      <div class="box-label"><i class="ti ti-sparkles" aria-hidden="true"></i> AI suggested answer</div>
+      <div class="answer-text" id="answer">
+        <span class="placeholder">Answer will be generated once a question is detected...</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="act-btn" onclick="copyAnswer()"><i class="ti ti-copy" aria-hidden="true"></i> Copy</button>
+      <button class="act-btn" onclick="clearAll()"><i class="ti ti-refresh" aria-hidden="true"></i> Clear</button>
+      <button class="act-btn" onclick="runDemo()"><i class="ti ti-player-play" aria-hidden="true"></i> Demo</button>
+      <button class="act-btn primary" onclick="askFollowup()">Follow-ups ↗</button>
+    </div>
+
+    <div class="api-key-box">
+      <label class="box-label"><i class="ti ti-key" aria-hidden="true"></i> Anthropic API Key</label>
+      <div style="display:flex;gap:8px">
+        <input type="password" id="api-key-input" placeholder="sk-ant-..." style="flex:1" />
+        <button class="act-btn" onclick="saveKey()" style="flex:0;padding:0 16px">Save</button>
+      </div>
+      <p class="hint">Your key is stored locally in your browser only. Never shared.</p>
+    </div>
+
+    <div class="history" id="history-section" style="display:none">
+      <div class="history-title">Session history</div>
+      <div id="history-list"></div>
+    </div>
+
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
